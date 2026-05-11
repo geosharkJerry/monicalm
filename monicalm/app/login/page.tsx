@@ -41,11 +41,11 @@ function LoginForm() {
       });
       const data = await res.json();
       if (!res.ok || !data.success) {
-        throw new Error(data?.error?.message ?? 'Invalid credentials');
+        throw new Error(data?.error?.message ?? '用户名或密码错误');
       }
       router.replace(next);
     } catch (e: any) {
-      setErr(e?.message ?? 'Sign-in failed');
+      setErr(e?.message ?? '登录失败');
     } finally {
       setBusy(false);
     }
@@ -62,22 +62,25 @@ function LoginForm() {
             monicalm
           </div>
           <h1 className="mt-1 text-2xl font-medium tracking-tight">
-            Sign in to continue
+            登录以继续
           </h1>
+          <p className="mt-2 text-xs text-muted-fg">
+            默认管理员：<span className="font-mono">admin</span> / <span className="font-mono">monicalm@2026</span>
+          </p>
         </div>
 
         <label className="block space-y-1.5">
-          <span className="text-xs font-medium text-muted-fg">Username</span>
+          <span className="text-xs font-medium text-muted-fg">用户名</span>
           <Input
             autoFocus
             value={username}
             onChange={(e) => setUsername(e.target.value)}
-            placeholder="alice"
+            placeholder="admin"
           />
         </label>
 
         <label className="block space-y-1.5">
-          <span className="text-xs font-medium text-muted-fg">Password</span>
+          <span className="text-xs font-medium text-muted-fg">密码</span>
           <Input
             type="password"
             value={password}
@@ -99,7 +102,7 @@ function LoginForm() {
           disabled={busy}
           className="w-full"
         >
-          {busy ? 'Signing in…' : 'Continue'}
+          {busy ? '登录中…' : '登录'}
         </Button>
       </form>
     </div>

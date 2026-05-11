@@ -28,7 +28,16 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const title = React.useMemo(() => {
     const seg = pathname.split('/').filter(Boolean)[0];
     if (!seg) return undefined;
-    return seg[0].toUpperCase() + seg.slice(1);
+    const TITLE_MAP: Record<string, string> = {
+      explore: '探索',
+      chat: '对话',
+      agents: '我的智能体',
+      dashboard: 'Token 中心',
+      settings: '设置',
+      admin: '管理后台',
+      login: '登录',
+    };
+    return TITLE_MAP[seg] ?? seg[0].toUpperCase() + seg.slice(1);
   }, [pathname]);
 
   return (
@@ -62,7 +71,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <RightPanel
         open={rightOpen}
         onClose={() => setRightOpen(false)}
-        title="Model Parameters"
+        title="模型参数"
       >
         <ModelParamPanel />
       </RightPanel>

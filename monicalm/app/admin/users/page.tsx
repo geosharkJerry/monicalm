@@ -11,10 +11,10 @@ export default function AdminUsersPage() {
     <div className="space-y-6">
       <header>
         <div className="text-xs uppercase tracking-wider text-muted-fg">
-          Admin · Users
+          管理后台 · 用户
         </div>
         <h1 className="mt-1 text-2xl font-medium tracking-tight">
-          User management
+          用户管理
         </h1>
       </header>
 

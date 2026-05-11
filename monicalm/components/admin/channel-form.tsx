@@ -73,15 +73,15 @@ export function ChannelForm({ initial, onSubmit, onCancel }: ChannelFormProps) {
 
   const submit = async () => {
     setErr(null);
-    if (!name.trim()) return setErr('Name is required');
-    if (!baseUrl.trim()) return setErr('Base URL is required');
-    if (!key.trim() && !initial?.id) return setErr('Channel key is required');
-    if (models.length === 0) return setErr('Select at least one model');
+    if (!name.trim()) return setErr('请填写渠道名称');
+    if (!baseUrl.trim()) return setErr('请填写接入地址');
+    if (!key.trim() && !initial?.id) return setErr('请填写渠道密钥');
+    if (models.length === 0) return setErr('至少选择一个模型');
 
     try {
       new URL(baseUrl); // throws if invalid
     } catch {
-      return setErr('Base URL must be a valid http(s) URL');
+      return setErr('接入地址必须为有效的 http(s) URL');
     }
 
     setBusy(true);
@@ -97,7 +97,7 @@ export function ChannelForm({ initial, onSubmit, onCancel }: ChannelFormProps) {
         status,
       });
     } catch (e: any) {
-      setErr(e?.message ?? 'Failed to save channel');
+      setErr(e?.message ?? '保存渠道失败');
     } finally {
       setBusy(false);
     }
@@ -112,7 +112,7 @@ export function ChannelForm({ initial, onSubmit, onCancel }: ChannelFormProps) {
       className="space-y-5"
     >
       <div className="grid gap-4 md:grid-cols-2">
-        <Field label="Channel name">
+        <Field label="渠道名称">
           <Input
             value={name}
             onChange={(e) => setName(e.target.value)}
@@ -120,7 +120,7 @@ export function ChannelForm({ initial, onSubmit, onCancel }: ChannelFormProps) {
           />
         </Field>
 
-        <Field label="Provider type">
+        <Field label="提供商类型">
           <select
             value={type}
             onChange={(e) => setType(parseInt(e.target.value, 10))}
@@ -134,7 +134,7 @@ export function ChannelForm({ initial, onSubmit, onCancel }: ChannelFormProps) {
           </select>
         </Field>
 
-        <Field label="Base URL" className="md:col-span-2">
+        <Field label="接入地址" className="md:col-span-2">
           <Input
             value={baseUrl}
             onChange={(e) => setBaseUrl(e.target.value)}
@@ -142,16 +142,16 @@ export function ChannelForm({ initial, onSubmit, onCancel }: ChannelFormProps) {
           />
         </Field>
 
-        <Field label="Channel key (secret)" className="md:col-span-2">
+        <Field label="渠道密钥（保密）" className="md:col-span-2">
           <Input
             type="password"
             value={key}
             onChange={(e) => setKey(e.target.value)}
-            placeholder={initial?.id ? '••••••••  (leave blank to keep)' : 'sk-…'}
+            placeholder={initial?.id ? '••••••••  (留空表示保持不变)' : 'sk-…'}
           />
         </Field>
 
-        <Field label="Weight" hint="Higher = more traffic">
+        <Field label="权重" hint="数值越高 = 流量越多">
           <Input
             type="number"
             min={0}
@@ -161,7 +161,7 @@ export function ChannelForm({ initial, onSubmit, onCancel }: ChannelFormProps) {
           />
         </Field>
 
-        <Field label="Rate limit (req/s)" hint="0 = unlimited">
+        <Field label="限流（次/秒）" hint="0 = 不限制">
           <Input
             type="number"
             min={0}
@@ -172,7 +172,7 @@ export function ChannelForm({ initial, onSubmit, onCancel }: ChannelFormProps) {
       </div>
 
       {/* Multi-select tag input */}
-      <Field label="Supported models" hint="Press Enter to add">
+      <Field label="支持模型" hint="按 Enter 添加">
         <div
           className={cn(
             'min-h-[2.25rem] w-full rounded-xl hairline bg-transparent px-2 py-1.5',
@@ -186,7 +186,7 @@ export function ChannelForm({ initial, onSubmit, onCancel }: ChannelFormProps) {
                 type="button"
                 onClick={() => setModels((p) => p.filter((x) => x !== m))}
                 className="ml-1 rounded-full p-0.5 hover:bg-muted-fg/10"
-                aria-label={`Remove ${m}`}
+                aria-label={`移除 ${m}`}
               >
                 <X className="h-2.5 w-2.5" />
               </button>
@@ -223,11 +223,11 @@ export function ChannelForm({ initial, onSubmit, onCancel }: ChannelFormProps) {
         </div>
       </Field>
 
-      <Field label="Status">
+      <Field label="状态">
         <div className="inline-flex items-center gap-2 rounded-full hairline bg-surface/60 p-0.5 text-xs">
           {[
-            { v: 1, l: 'Enabled' },
-            { v: 2, l: 'Disabled' },
+            { v: 1, l: '启用' },
+            { v: 2, l: '禁用' },
           ].map((o) => (
             <button
               key={o.v}
@@ -255,11 +255,11 @@ export function ChannelForm({ initial, onSubmit, onCancel }: ChannelFormProps) {
       <div className="flex justify-end gap-2 pt-2">
         {onCancel && (
           <Button type="button" variant="ghost" onClick={onCancel}>
-            Cancel
+            取消
           </Button>
         )}
         <Button type="submit" variant="primary" disabled={busy}>
-          {busy ? 'Saving…' : initial?.id ? 'Save changes' : 'Create channel'}
+          {busy ? '保存中…' : initial?.id ? '保存修改' : '创建渠道'}
         </Button>
       </div>
     </form>

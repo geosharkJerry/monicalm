@@ -13,26 +13,25 @@ export default function Home() {
           <span className="breathe-dot" /> monicalm · v0.1
         </span>
         <h1 className="mt-5 text-5xl font-medium tracking-tight md:text-6xl">
-          One workbench.
+          一个工作台，
           <br />
-          <span className="shimmer-text">Every model.</span>
+          <span className="shimmer-text">所有模型。</span>
         </h1>
         <p className="mt-5 max-w-xl text-base text-muted-fg">
-          A neutral, Genspark-style frontend over the new-api gateway. Bring
-          your own keys, route across providers, watch tokens flow.
+          基于 new-api 网关的 Genspark 风格中性前端。自带密钥，多供应商路由，实时查看 Token 消耗。
         </p>
         <div className="mt-8 flex gap-3">
           <Link
             href="/chat"
             className="inline-flex h-10 items-center gap-2 rounded-full bg-fg px-5 text-sm font-medium text-bg transition-opacity hover:opacity-90"
           >
-            Open workbench <ArrowUpRight className="h-4 w-4" />
+            进入工作台 <ArrowUpRight className="h-4 w-4" />
           </Link>
           <Link
             href="/dashboard"
             className="inline-flex h-10 items-center gap-2 rounded-full hairline bg-surface px-5 text-sm font-medium transition-colors hover:bg-surface-2"
           >
-            Token Center
+            Token 中心
           </Link>
         </div>
       </section>
@@ -41,18 +40,18 @@ export default function Home() {
         {[
           {
             icon: Sparkles,
-            title: 'Streaming chat',
-            text: 'SSE token streams with a breathing cursor and rich markdown.',
+            title: '流式对话',
+            text: 'SSE Token 流式输出，呼吸光标与丰富 Markdown 渲染。',
           },
           {
             icon: Bot,
-            title: 'Bring-your-own agent',
-            text: 'Compose custom system prompts, tools and model routing.',
+            title: '自定义智能体',
+            text: '自由编排系统提示词、工具及多模型路由。',
           },
           {
             icon: KeyRound,
-            title: 'Token Center',
-            text: 'Manage API keys, view per-model spend, redeem quota.',
+            title: 'Token 中心',
+            text: '管理 API 密钥，查看各模型消费，兑换额度。',
           },
         ].map((f) => (
           <div

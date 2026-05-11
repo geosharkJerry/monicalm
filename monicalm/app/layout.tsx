@@ -5,9 +5,9 @@ import 'highlight.js/styles/github-dark.css';
 import { AppShell } from '@/components/layout/app-shell';
 
 export const metadata: Metadata = {
-  title: 'monicalm — AI agent workbench',
+  title: 'monicalm — AI 智能体工作台',
   description:
-    'A Genspark-style multi-model AI agent workbench powered by new-api.',
+    '基于 new-api 网关的 Genspark 风格多模型 AI 智能体工作台。',
   applicationName: 'monicalm',
   icons: { icon: '/favicon.svg' },
 };
@@ -27,7 +27,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark" suppressHydrationWarning>
+    <html lang="zh-CN" className="dark" suppressHydrationWarning>
       <body className="min-h-dvh font-sans antialiased">
         <AppShell>{children}</AppShell>
       </body>

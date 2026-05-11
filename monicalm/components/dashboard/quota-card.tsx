@@ -33,23 +33,23 @@ export function QuotaCard({ summary }: { summary: QuotaSummary }) {
       <div className="flex items-start justify-between gap-6">
         <div>
           <div className="text-xs uppercase tracking-wider text-muted-fg">
-            Remaining quota
+            剩余额度
           </div>
           <div className="mt-2 flex items-baseline gap-2">
             <span className="text-5xl font-medium tracking-tight tabular-nums">
               ${usd}
             </span>
             <span className="text-sm text-muted-fg">
-              · {formatTokens(summary.remain_quota)} credits
+              · {formatTokens(summary.remain_quota)} 额度
             </span>
           </div>
           <div className="mt-1 text-xs text-muted-fg">
-            {pct}% of granted quota consumed this period
+            本周期已消耗总额度的 {pct}%
           </div>
         </div>
         <div className="flex items-center gap-2">
           <RedeemDialog />
-          <Button variant="primary">Top up</Button>
+          <Button variant="primary">充值</Button>
         </div>
       </div>
 
@@ -82,7 +82,7 @@ function RedeemDialog() {
           const data = (await res.json()) as RedeemResult;
           setResult(data);
         } catch (e: any) {
-          setResult({ success: false, message: e?.message ?? 'Network error' });
+          setResult({ success: false, message: e?.message ?? '网络异常' });
         } finally {
           setSubmitting(false);
         }
@@ -95,14 +95,14 @@ function RedeemDialog() {
       <DialogTrigger asChild>
         <Button variant="default">
           <Gift className="h-4 w-4" />
-          Redeem code
+          兑换码
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Redeem a quota code</DialogTitle>
+          <DialogTitle>兑换额度码</DialogTitle>
           <DialogDescription>
-            Paste the code below. Quota is granted to your active account.
+            请粘贴下方的兑换码，额度将发放到当前账户。
           </DialogDescription>
         </DialogHeader>
         <Input
@@ -125,14 +125,14 @@ function RedeemDialog() {
         )}
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="ghost">Cancel</Button>
+            <Button variant="ghost">取消</Button>
           </DialogClose>
           <Button
             variant="primary"
             disabled={!code || submitting}
             onClick={() => submit(code)}
           >
-            {submitting ? 'Verifying…' : 'Redeem'}
+            {submitting ? '验证中…' : '兑换'}
           </Button>
         </DialogFooter>
       </DialogContent>

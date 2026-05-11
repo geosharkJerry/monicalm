@@ -56,27 +56,27 @@ export interface FriendlyError {
 export function toFriendlyError(status: number, body: any): FriendlyError {
   const msg = body?.error?.message ?? body?.message ?? '';
   if (status === 401 || status === 403) {
-    return { status, code: 'unauthorized', message: 'Session expired. Please sign in again.' };
+    return { status, code: 'unauthorized', message: '会话已过期，请重新登录。' };
   }
   if (status === 402) {
     return {
       status,
       code: 'insufficient_quota',
-      message: 'You are out of quota. Top up or redeem a code to continue.',
+      message: '额度已耗尽，请充值或兑换额度后继续。',
     };
   }
   if (status === 429) {
     return {
       status,
       code: 'rate_limited',
-      message: msg || 'Too many requests — slow down a moment.',
+      message: msg || '请求过于频繁，请稍后再试。',
     };
   }
   if (status >= 500) {
     return {
       status,
       code: 'upstream_error',
-      message: msg || 'Upstream channel had a hiccup. Retry shortly.',
+      message: msg || '上游渠道暂时异常，请稍后重试。',
     };
   }
   return { status, code: 'request_failed', message: msg || `HTTP ${status}` };

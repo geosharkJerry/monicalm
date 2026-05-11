@@ -41,7 +41,7 @@ export function TopBar({
         <Search className="h-3.5 w-3.5" />
         <input
           className="w-full bg-transparent outline-none placeholder:text-muted-fg/60"
-          placeholder="Ask anything, run an agent, or jump to…"
+          placeholder="提问、运行智能体或跳转至…"
         />
         <kbd className="hairline rounded-md px-1.5 py-0.5 text-[10px] text-muted-fg">⌘K</kbd>
       </div>
@@ -50,7 +50,7 @@ export function TopBar({
         variant="ghost"
         size="icon"
         onClick={onToggleTheme}
-        aria-label="Toggle theme"
+        aria-label="切换主题"
       >
         {theme === 'dark' ? (
           <Sun className="h-4 w-4" />
@@ -62,7 +62,7 @@ export function TopBar({
         variant="ghost"
         size="icon"
         onClick={onToggleRight}
-        aria-label="Toggle right panel"
+        aria-label="切换右侧面板"
       >
         <PanelRight className="h-4 w-4" />
       </Button>

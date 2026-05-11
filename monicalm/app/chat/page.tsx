@@ -73,7 +73,7 @@ export default function ChatPage() {
           m.id === assistantId
             ? {
                 ...m,
-                content: `⚠️ ${err?.message || 'Stream failed'}`,
+                content: `⚠️ ${err?.message || '流式输出失败'}`,
                 pending: false,
               }
             : m,
@@ -125,7 +125,7 @@ export default function ChatPage() {
         selectedAgentId={agentId}
         onSelectModel={setModelId}
         onSelectAgent={setAgentId}
-        placeholder="Message your agent — drop files anywhere"
+        placeholder="与你的智能体对话 —— 拖拽文件到任意位置"
       />
     </div>
   );
@@ -135,20 +135,20 @@ function EmptyState() {
   return (
     <div className="mx-auto mt-12 max-w-2xl text-center animate-fade-in">
       <span className="hairline inline-flex items-center gap-1.5 rounded-full bg-surface/70 px-3 py-1 text-xs text-muted-fg">
-        <span className="breathe-dot" /> workspace ready
+        <span className="breathe-dot" /> 工作台就绪
       </span>
       <h2 className="mt-5 text-4xl font-medium tracking-tight">
-        What shall we build today?
+        今天我们来构建点什么？
       </h2>
       <p className="mt-3 text-sm text-muted-fg">
-        Choose an agent, drop files, ask anything. Token usage is metered live.
+        选个智能体、上传文件、随意提问。Token 消耗实时计量。
       </p>
       <div className="mt-8 grid gap-2 sm:grid-cols-2">
         {[
-          'Summarize this PDF with key risks',
-          'Refactor my React component for SSR',
-          'Plan a 5-day Kyoto itinerary in autumn',
-          'Explain Laplace transform in 3 lines',
+          '总结这份 PDF，列出关键风险',
+          '重构我的 React 组件以支持 SSR',
+          '规划一份京都秋季 5 日游行程',
+          '用三句话解释拉普拉斯变换',
         ].map((s) => (
           <button
             key={s}

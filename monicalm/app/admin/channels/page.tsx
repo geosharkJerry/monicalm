@@ -60,10 +60,10 @@ export default function AdminChannelsPage() {
       <header className="flex items-end justify-between">
         <div>
           <div className="text-xs uppercase tracking-wider text-muted-fg">
-            Admin · Channels
+            管理后台 · 渠道
           </div>
           <h1 className="mt-1 text-2xl font-medium tracking-tight">
-            Upstream channels
+            上游渠道
           </h1>
         </div>
         <Dialog
@@ -75,13 +75,13 @@ export default function AdminChannelsPage() {
         >
           <DialogTrigger asChild>
             <Button variant="primary" size="sm">
-              <Plus className="h-3.5 w-3.5" /> Add channel
+              <Plus className="h-3.5 w-3.5" /> 新增渠道
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>
-                {editing ? `Edit · ${editing.name}` : 'New channel'}
+                {editing ? `编辑 · ${editing.name}` : '新增渠道'}
               </DialogTitle>
             </DialogHeader>
             <ChannelForm
@@ -97,12 +97,12 @@ export default function AdminChannelsPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Base URL</TableHead>
-              <TableHead>Models</TableHead>
-              <TableHead>Weight</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>名称</TableHead>
+              <TableHead>接入地址</TableHead>
+              <TableHead>模型</TableHead>
+              <TableHead>权重</TableHead>
+              <TableHead>状态</TableHead>
+              <TableHead className="text-right">操作</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -136,10 +136,10 @@ export default function AdminChannelsPage() {
                     }
                   >
                     {c.status === 1
-                      ? 'Active'
+                      ? '启用'
                       : c.status === 2
-                        ? 'Disabled'
-                        : 'Auto-off'}
+                        ? '已禁用'
+                        : '自动禄出'}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">
@@ -152,7 +152,7 @@ export default function AdminChannelsPage() {
                     }}
                   >
                     <Pencil className="h-3 w-3" />
-                    Edit
+                    编辑
                   </Button>
                 </TableCell>
               </TableRow>

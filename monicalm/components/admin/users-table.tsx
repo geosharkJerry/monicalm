@@ -26,9 +26,9 @@ import { formatTokens } from '@/lib/utils';
 import type { AdminUser } from '@/types/api';
 
 const ROLE_LABEL: Record<AdminUser['role'], string> = {
-  1: 'User',
-  10: 'Admin',
-  100: 'Root',
+  1: '普通用户',
+  10: '管理员',
+  100: '超级管理员',
 };
 
 export function UsersTable({
@@ -44,25 +44,25 @@ export function UsersTable({
     <div className="rounded-2xl hairline bg-surface/60">
       <div className="flex items-center justify-between px-5 py-4">
         <div>
-          <h3 className="text-sm font-medium">Users</h3>
+          <h3 className="text-sm font-medium">用户</h3>
           <p className="text-xs text-muted-fg">
-            Adjust quota, change role, ban abusers.
+            调整额度、修改角色、封禁违规账号。
           </p>
         </div>
-        <Input placeholder="Search users…" className="max-w-xs" />
+        <Input placeholder="搜索用户…" className="max-w-xs" />
       </div>
 
       <div className="border-t border-line">
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>User</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead className="hidden md:table-cell">Quota</TableHead>
-              <TableHead className="hidden md:table-cell">Used</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>用户</TableHead>
+              <TableHead>邮箱</TableHead>
+              <TableHead>角色</TableHead>
+              <TableHead className="hidden md:table-cell">额度</TableHead>
+              <TableHead className="hidden md:table-cell">已用</TableHead>
+              <TableHead>状态</TableHead>
+              <TableHead className="text-right">操作</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -96,7 +96,7 @@ export function UsersTable({
                 </TableCell>
                 <TableCell>
                   <Badge variant={u.status === 1 ? 'outline' : 'danger'}>
-                    {u.status === 1 ? 'Active' : 'Banned'}
+                    {u.status === 1 ? '正常' : '已封禁'}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">
@@ -111,7 +111,7 @@ export function UsersTable({
                       onClick={() => onToggleBan(u.id, u.status === 1)}
                     >
                       <Ban className="h-3 w-3" />
-                      {u.status === 1 ? 'Ban' : 'Unban'}
+                      {u.status === 1 ? '封禁' : '解封'}
                     </Button>
                   </div>
                 </TableCell>
@@ -138,15 +138,15 @@ function AdjustQuotaDialog({
       <DialogTrigger asChild>
         <Button variant="default" size="sm">
           <Wallet className="h-3 w-3" />
-          Adjust
+          调整
         </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Adjust quota — {user.display_name}</DialogTitle>
+          <DialogTitle>调整额度 — {user.display_name}</DialogTitle>
         </DialogHeader>
         <label className="text-xs text-muted-fg">
-          Delta (positive to grant, negative to deduct)
+          增减量（正数为发放，负数为扣除）
         </label>
         <Input
           type="number"
@@ -154,11 +154,11 @@ function AdjustQuotaDialog({
           onChange={(e) => setDelta(e.target.value)}
         />
         <div className="text-xs text-muted-fg">
-          Current: {formatTokens(user.quota)} credits
+          当前额度：{formatTokens(user.quota)}
         </div>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="ghost">Cancel</Button>
+            <Button variant="ghost">取消</Button>
           </DialogClose>
           <Button
             variant="primary"
@@ -172,7 +172,7 @@ function AdjustQuotaDialog({
               }
             }}
           >
-            {busy ? 'Applying…' : 'Apply'}
+            {busy ? '提交中…' : '提交'}
           </Button>
         </DialogFooter>
       </DialogContent>

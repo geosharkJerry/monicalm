@@ -53,8 +53,8 @@ export function UsageTrendChart({ data }: { data: UsagePoint[] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Token consumption</CardTitle>
-        <div className="text-xs text-muted-fg">Daily prompt vs. completion</div>
+        <CardTitle>Token 消耗</CardTitle>
+        <div className="text-xs text-muted-fg">每日输入与输出对比</div>
       </CardHeader>
       <CardContent>
         <div className="h-64 w-full">
@@ -103,8 +103,8 @@ export function ModelShareChart({ data }: { data: ModelShare[] }) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Model mix</CardTitle>
-        <div className="text-xs text-muted-fg">By total tokens</div>
+        <CardTitle>模型占比</CardTitle>
+        <div className="text-xs text-muted-fg">按 Token 总量统计</div>
       </CardHeader>
       <CardContent>
         <div className="flex h-64 w-full items-center">

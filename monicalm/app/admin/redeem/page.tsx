@@ -44,7 +44,7 @@ export default function AdminRedeemPage() {
       });
       setRows(generated);
     } catch (e: any) {
-      setErr(e?.message ?? 'Generation failed');
+      setErr(e?.message ?? '生成失败');
     }
   };
 
@@ -60,7 +60,7 @@ export default function AdminRedeemPage() {
       if (!res.ok) throw new Error(`HTTP ${res.status}`);
       setPersisted(rows.length);
     } catch (e: any) {
-      setErr(e?.message ?? 'Persist failed');
+      setErr(e?.message ?? '保存失败');
     } finally {
       setBusy(false);
     }
@@ -76,10 +76,10 @@ export default function AdminRedeemPage() {
     <div className="space-y-6">
       <header>
         <div className="text-xs uppercase tracking-wider text-muted-fg">
-          Admin · Redeem codes
+          管理后台 · 兑换码
         </div>
         <h1 className="mt-1 text-2xl font-medium tracking-tight">
-          Batch generate
+          批量生成
         </h1>
       </header>
 
@@ -87,10 +87,10 @@ export default function AdminRedeemPage() {
         {/* Generator form */}
         <Card>
           <CardHeader>
-            <CardTitle>Parameters</CardTitle>
+            <CardTitle>参数</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            <Field label="Count">
+            <Field label="数量">
               <Input
                 type="number"
                 min={1}
@@ -99,7 +99,7 @@ export default function AdminRedeemPage() {
                 onChange={(e) => setCount(e.target.value)}
               />
             </Field>
-            <Field label="Quota per code (credits)">
+            <Field label="单张额度（额度单位）">
               <Input
                 type="number"
                 min={1}
@@ -107,7 +107,7 @@ export default function AdminRedeemPage() {
                 onChange={(e) => setQuota(e.target.value)}
               />
             </Field>
-            <Field label="Prefix">
+            <Field label="前缀">
               <Input
                 maxLength={12}
                 value={prefix}
@@ -116,7 +116,7 @@ export default function AdminRedeemPage() {
                 }
               />
             </Field>
-            <Field label="Expires in (days, 0 = never)">
+            <Field label="有效期（天数，0 = 永不过期）">
               <Input
                 type="number"
                 min={0}
@@ -134,7 +134,7 @@ export default function AdminRedeemPage() {
             <div className="flex gap-2 pt-2">
               <Button variant="primary" onClick={handleGenerate}>
                 <Sparkles className="h-3.5 w-3.5" />
-                Generate
+                生成
               </Button>
               {rows.length > 0 && (
                 <Button
@@ -142,13 +142,13 @@ export default function AdminRedeemPage() {
                   onClick={persistToBackend}
                   disabled={busy}
                 >
-                  {busy ? 'Saving…' : 'Save to server'}
+                  {busy ? '保存中…' : '保存到服务器'}
                 </Button>
               )}
             </div>
             {persisted !== null && (
               <div className="text-xs text-muted-fg">
-                ✓ Saved {persisted} codes to backend
+                ✓ 已保存 {persisted} 个兑换码到后端
               </div>
             )}
           </CardContent>
@@ -158,11 +158,11 @@ export default function AdminRedeemPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between">
             <div>
-              <CardTitle>Preview</CardTitle>
+              <CardTitle>预览</CardTitle>
               <div className="text-xs text-muted-fg">
                 {rows.length === 0
-                  ? 'No codes generated yet'
-                  : `${rows.length.toLocaleString()} codes`}
+                  ? '尚未生成兑换码'
+                  : `共 ${rows.length.toLocaleString()} 个兑换码`}
               </div>
             </div>
             {rows.length > 0 && (
@@ -173,7 +173,7 @@ export default function AdminRedeemPage() {
                   ) : (
                     <Copy className="h-3.5 w-3.5" />
                   )}
-                  {copied ? 'Copied' : 'Copy all'}
+                  {copied ? '已复制' : '全部复制'}
                 </Button>
                 <Button
                   variant="default"
@@ -183,7 +183,7 @@ export default function AdminRedeemPage() {
                   }
                 >
                   <Download className="h-3.5 w-3.5" />
-                  Export CSV
+                  导出 CSV
                 </Button>
               </div>
             )}
@@ -192,16 +192,16 @@ export default function AdminRedeemPage() {
             <div className="max-h-[480px] overflow-y-auto rounded-xl hairline bg-bg/40">
               {rows.length === 0 ? (
                 <div className="grid h-40 place-items-center text-xs text-muted-fg">
-                  Configure on the left, then press Generate.
+                  请在左侧配置参数后点击“生成”。
                 </div>
               ) : (
                 <table className="w-full text-sm">
                   <thead className="sticky top-0 bg-surface/95 backdrop-blur-md">
                     <tr className="text-[11px] uppercase tracking-wider text-muted-fg">
                       <th className="px-4 py-2 text-left">#</th>
-                      <th className="px-4 py-2 text-left">Code</th>
-                      <th className="px-4 py-2 text-left">Quota</th>
-                      <th className="px-4 py-2 text-left">Expires</th>
+                      <th className="px-4 py-2 text-left">兑换码</th>
+                      <th className="px-4 py-2 text-left">额度</th>
+                      <th className="px-4 py-2 text-left">过期时间</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -225,8 +225,7 @@ export default function AdminRedeemPage() {
                           colSpan={4}
                           className="border-t border-line px-4 py-2 text-center text-xs text-muted-fg"
                         >
-                          … {(rows.length - 200).toLocaleString()} more in the
-                          CSV export.
+                          … 另有 {(rows.length - 200).toLocaleString()} 个兑换码包含于 CSV 导出中。
                         </td>
                       </tr>
                     )}

@@ -28,13 +28,13 @@ export function PricingGrid({ entries }: { entries: PricingEntry[] }) {
 
           <div className="mt-4 grid grid-cols-2 gap-3 text-xs">
             <div className="rounded-xl bg-muted/50 p-3">
-              <div className="text-muted-fg">Input</div>
+              <div className="text-muted-fg">输入</div>
               <div className="mt-1 font-mono text-base text-fg">
                 ×{e.input_rate}
               </div>
             </div>
             <div className="rounded-xl bg-muted/50 p-3">
-              <div className="text-muted-fg">Output</div>
+              <div className="text-muted-fg">输出</div>
               <div className="mt-1 font-mono text-base text-fg">
                 ×{e.output_rate}
               </div>
@@ -45,7 +45,7 @@ export function PricingGrid({ entries }: { entries: PricingEntry[] }) {
             <div className="mt-3 flex flex-wrap gap-1.5">
               {e.context && (
                 <span className="rounded-full hairline px-2 py-0.5 text-[10px] text-muted-fg">
-                  {e.context}K ctx
+                  {e.context}K 上下文
                 </span>
               )}
               {e.tags?.map((t) => (

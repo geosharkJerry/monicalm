@@ -19,11 +19,11 @@ import { cn } from '@/lib/utils';
  * Genspark feel: ultra-minimal icon + label, hairline divider, smooth collapse.
  */
 const NAV = [
-  { href: '/explore', icon: Compass, label: 'Explore' },
-  { href: '/chat', icon: MessageSquareText, label: 'Chat' },
-  { href: '/agents', icon: Bot, label: 'Agents' },
-  { href: '/dashboard', icon: KeyRound, label: 'Token Center' },
-  { href: '/settings', icon: Settings, label: 'Settings' },
+  { href: '/explore', icon: Compass, label: '探索' },
+  { href: '/chat', icon: MessageSquareText, label: '对话' },
+  { href: '/agents', icon: Bot, label: '我的智能体' },
+  { href: '/dashboard', icon: KeyRound, label: 'Token 中心' },
+  { href: '/settings', icon: Settings, label: '设置' },
 ];
 
 export function Sidebar({
@@ -52,7 +52,7 @@ export function Sidebar({
         )}
         <button
           onClick={onToggle}
-          aria-label="Toggle sidebar"
+          aria-label="切换侧边栏"
           className={cn(
             'ml-auto rounded-md p-1.5 text-muted-fg hover:bg-muted hover:text-fg transition-colors',
             collapsed && 'ml-0 mx-auto',
@@ -112,8 +112,8 @@ export function Sidebar({
           <div className="h-7 w-7 rounded-full hairline bg-surface-2" />
           {!collapsed && (
             <div className="min-w-0">
-              <div className="truncate text-xs font-medium">guest</div>
-              <div className="truncate text-[11px] text-muted-fg">Free plan</div>
+              <div className="truncate text-xs font-medium">访客</div>
+              <div className="truncate text-[11px] text-muted-fg">免费版</div>
             </div>
           )}
         </div>

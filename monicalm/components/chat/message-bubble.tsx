@@ -75,7 +75,7 @@ export function MessageBubble({
             {message.content ? (
               <Markdown>{message.content}</Markdown>
             ) : streaming ? (
-              <span className="shimmer-text text-sm">Thinking</span>
+              <span className="shimmer-text text-sm">思考中</span>
             ) : null}
             {streaming && (
               <span className="ml-0.5 inline-block h-4 w-[2px] translate-y-0.5 bg-fg align-middle animate-caret-blink" />
@@ -91,7 +91,7 @@ export function MessageBubble({
               className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] hover:bg-muted hover:text-fg"
             >
               {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-              {copied ? 'Copied' : 'Copy'}
+              {copied ? '已复制' : '复制'}
             </button>
             {onRegenerate && (
               <button
@@ -99,7 +99,7 @@ export function MessageBubble({
                 className="inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] hover:bg-muted hover:text-fg"
               >
                 <RefreshCcw className="h-3 w-3" />
-                Regenerate
+                重新生成
               </button>
             )}
             {message.model && (

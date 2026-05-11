@@ -44,7 +44,7 @@ export async function middleware(req: NextRequest) {
   if (!claims) {
     if (pathname.startsWith('/api/')) {
       return NextResponse.json(
-        { error: { code: 'unauthorized', message: 'Sign-in required' } },
+        { error: { code: 'unauthorized', message: '请先登录' } },
         { status: 401 },
       );
     }
@@ -59,7 +59,7 @@ export async function middleware(req: NextRequest) {
     if (claims.role !== 'admin' && claims.role !== 'root') {
       if (pathname.startsWith('/api/')) {
         return NextResponse.json(
-          { error: { code: 'forbidden', message: 'Admin only' } },
+          { error: { code: 'forbidden', message: '仅管理员可访问' } },
           { status: 403 },
         );
       }

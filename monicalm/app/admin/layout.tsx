@@ -7,10 +7,10 @@ import { Users, Plug, TicketPercent, ScrollText } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 const ADMIN_NAV = [
-  { href: '/admin/users', icon: Users, label: 'Users' },
-  { href: '/admin/channels', icon: Plug, label: 'Channels' },
-  { href: '/admin/redeem', icon: TicketPercent, label: 'Redeem codes' },
-  { href: '/admin/logs', icon: ScrollText, label: 'Logs' },
+  { href: '/admin/users', icon: Users, label: '用户管理' },
+  { href: '/admin/channels', icon: Plug, label: '渠道管理' },
+  { href: '/admin/redeem', icon: TicketPercent, label: '兑换码' },
+  { href: '/admin/logs', icon: ScrollText, label: '日志' },
 ];
 
 export default function AdminLayout({
@@ -23,7 +23,7 @@ export default function AdminLayout({
     <div className="mx-auto flex max-w-7xl gap-6 px-6 py-8">
       <aside className="sticky top-20 h-fit w-56 shrink-0">
         <div className="mb-3 px-2 text-xs uppercase tracking-wider text-muted-fg">
-          Admin
+          管理后台
         </div>
         <ul className="flex flex-col gap-0.5">
           {ADMIN_NAV.map(({ href, icon: Icon, label }) => {

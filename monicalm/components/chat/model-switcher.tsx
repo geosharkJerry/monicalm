@@ -15,17 +15,17 @@ import type { AgentOption, ModelOption } from '@/types/chat';
 
 /** Default catalog — overridden by /api/models in production. */
 export const DEFAULT_MODELS: ModelOption[] = [
-  { id: 'gpt-4o', label: 'GPT-4o', provider: 'openai', description: 'Fast multimodal', inputRate: 1, outputRate: 3 },
-  { id: 'gpt-4o-mini', label: 'GPT-4o mini', provider: 'openai', description: 'Cheap & quick', inputRate: 0.15, outputRate: 0.6 },
-  { id: 'claude-3-5-sonnet', label: 'Claude 3.5 Sonnet', provider: 'anthropic', description: 'Reasoning + code', inputRate: 3, outputRate: 15 },
-  { id: 'claude-3-5-haiku', label: 'Claude 3.5 Haiku', provider: 'anthropic', description: 'Light & fast', inputRate: 0.8, outputRate: 4 },
-  { id: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro', provider: 'google', description: 'Long-context', inputRate: 1.25, outputRate: 5 },
+  { id: 'gpt-4o', label: 'GPT-4o', provider: 'openai', description: '多模态、响应快', inputRate: 1, outputRate: 3 },
+  { id: 'gpt-4o-mini', label: 'GPT-4o mini', provider: 'openai', description: '低成本、轻量', inputRate: 0.15, outputRate: 0.6 },
+  { id: 'claude-3-5-sonnet', label: 'Claude 3.5 Sonnet', provider: 'anthropic', description: '推理与代码', inputRate: 3, outputRate: 15 },
+  { id: 'claude-3-5-haiku', label: 'Claude 3.5 Haiku', provider: 'anthropic', description: '轻盈快速', inputRate: 0.8, outputRate: 4 },
+  { id: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro', provider: 'google', description: '超长上下文', inputRate: 1.25, outputRate: 5 },
 ];
 
 export const DEFAULT_AGENTS: AgentOption[] = [
-  { id: 'default', name: 'Plain chat', emoji: '✦', modelId: 'gpt-4o-mini', systemPrompt: 'You are a helpful assistant.' },
-  { id: 'researcher', name: 'Deep researcher', emoji: '◍', modelId: 'claude-3-5-sonnet', systemPrompt: 'You are a meticulous researcher. Cite sources.' },
-  { id: 'coder', name: 'Code reviewer', emoji: '◰', modelId: 'gpt-4o', systemPrompt: 'You are a senior engineer. Give code-review-grade feedback.' },
+  { id: 'default', name: '普通对话', emoji: '✦', modelId: 'gpt-4o-mini', systemPrompt: '你是一位乐于助人的智能助手。' },
+  { id: 'researcher', name: '深度研究员', emoji: '◍', modelId: 'claude-3-5-sonnet', systemPrompt: '你是一名严谨的研究员，请始终标明资料出处。' },
+  { id: 'coder', name: '代码评审官', emoji: '◰', modelId: 'gpt-4o', systemPrompt: '你是一名资深工程师，请以代码评审的严谨度提出反馈。' },
 ];
 
 export function ModelSwitcher({
@@ -69,7 +69,7 @@ export function ModelSwitcher({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="start" className="w-72">
-        <DropdownMenuLabel>Agents</DropdownMenuLabel>
+        <DropdownMenuLabel>智能体</DropdownMenuLabel>
         {agents.map((a) => (
           <DropdownMenuItem
             key={a.id}
@@ -82,14 +82,14 @@ export function ModelSwitcher({
             <div className="min-w-0 flex-1">
               <div className="truncate text-sm">{a.name}</div>
               <div className="truncate text-[11px] text-muted-fg">
-                via {a.modelId}
+                使用 {a.modelId}
               </div>
             </div>
             {a.id === selectedAgentId && <Check className="h-3.5 w-3.5" />}
           </DropdownMenuItem>
         ))}
         <DropdownMenuSeparator />
-        <DropdownMenuLabel>Models</DropdownMenuLabel>
+        <DropdownMenuLabel>模型</DropdownMenuLabel>
         {models.map((m) => (
           <DropdownMenuItem
             key={m.id}
@@ -102,7 +102,7 @@ export function ModelSwitcher({
             <div className="min-w-0 flex-1">
               <div className="truncate text-sm">{m.label}</div>
               <div className="truncate text-[11px] text-muted-fg">
-                {m.provider} · in {m.inputRate}× / out {m.outputRate}×
+                {m.provider} · 输入 {m.inputRate}× / 输出 {m.outputRate}×
               </div>
             </div>
             {m.id === selectedModelId && !selectedAgentId && (

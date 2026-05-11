@@ -45,7 +45,7 @@ export function ChatInput({
   selectedAgentId,
   onSelectModel,
   onSelectAgent,
-  placeholder = 'Ask anything…',
+  placeholder = '随意提问…',
 }: ChatInputProps) {
   const [attachments, setAttachments] = React.useState<Attachment[]>([]);
   const [dragOver, setDragOver] = React.useState(false);
@@ -144,7 +144,7 @@ export function ChatInput({
             type="button"
             onClick={() => fileRef.current?.click()}
             className="grid h-9 w-9 shrink-0 place-items-center rounded-full hairline text-muted-fg hover:bg-muted hover:text-fg transition-colors"
-            aria-label="Attach file"
+            aria-label="上传文件"
           >
             <Paperclip className="h-4 w-4" />
           </button>
@@ -185,7 +185,7 @@ export function ChatInput({
               type="button"
               onClick={onAbort}
               className="grid h-9 w-9 place-items-center rounded-full bg-fg text-bg transition-opacity hover:opacity-90"
-              aria-label="Stop"
+              aria-label="停止"
             >
               <Square className="h-3.5 w-3.5 fill-current" />
             </button>
@@ -199,7 +199,7 @@ export function ChatInput({
                 'transition-opacity hover:opacity-90',
                 'disabled:opacity-30 disabled:cursor-not-allowed',
               )}
-              aria-label="Send"
+              aria-label="发送"
             >
               <ArrowUp className="h-4 w-4" />
             </button>
@@ -208,8 +208,8 @@ export function ChatInput({
 
         {/* hint */}
         <div className="border-t border-line px-4 py-1.5 text-[11px] text-muted-fg flex justify-between">
-          <span>Enter to send · Shift+Enter for newline · Esc to stop</span>
-          <span className="hidden sm:inline">monicalm · routed via new-api</span>
+          <span>Enter 发送 · Shift+Enter 换行 · Esc 停止</span>
+          <span className="hidden sm:inline">monicalm · 由 new-api 路由</span>
         </div>
       </motion.div>
     </div>
@@ -240,7 +240,7 @@ function AttachmentChip({
       <button
         onClick={onRemove}
         className="rounded-full p-0.5 text-muted-fg opacity-0 transition-opacity hover:bg-muted hover:text-fg group-hover:opacity-100"
-        aria-label="Remove"
+        aria-label="移除"
       >
         <X className="h-3 w-3" />
       </button>

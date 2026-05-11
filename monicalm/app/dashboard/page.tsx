@@ -29,14 +29,14 @@ export default function DashboardPage() {
       <header className="flex items-end justify-between">
         <div>
           <div className="text-xs uppercase tracking-wider text-muted-fg">
-            Token Center
+            Token 中心
           </div>
           <h1 className="mt-1 text-3xl font-medium tracking-tight">
-            Quota & analytics
+            额度与用量分析
           </h1>
         </div>
         <div className="hidden text-xs text-muted-fg md:block">
-          Window · last 14 days
+          统计区间 · 最近 14 天
         </div>
       </header>
 
@@ -85,9 +85,9 @@ export default function DashboardPage() {
 
       <section className="space-y-3">
         <div className="flex items-end justify-between">
-          <h2 className="text-lg font-medium tracking-tight">Pricing</h2>
+          <h2 className="text-lg font-medium tracking-tight">价格体系</h2>
           <span className="text-xs text-muted-fg">
-            Multipliers are relative to the base credit unit
+            倍率相对于基准额度单位
           </span>
         </div>
         <PricingGrid entries={MOCK_PRICING} />

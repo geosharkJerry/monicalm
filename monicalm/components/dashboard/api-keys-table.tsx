@@ -45,15 +45,15 @@ export function ApiKeysTable({
     <div className="rounded-2xl hairline bg-surface/60">
       <div className="flex items-center justify-between px-5 py-4">
         <div>
-          <h3 className="text-sm font-medium">API tokens</h3>
+          <h3 className="text-sm font-medium">API 密钥</h3>
           <p className="text-xs text-muted-fg">
-            Use these in your apps and SDKs. Tokens are scoped to your account.
+            用于你的应用与 SDK，密钥仅在当前账户下生效。
           </p>
         </div>
         <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger asChild>
             <Button variant="primary" size="sm">
-              <Plus className="h-3.5 w-3.5" /> New token
+              <Plus className="h-3.5 w-3.5" /> 新建密钥
             </Button>
           </DialogTrigger>
           <CreateTokenDialog
@@ -69,19 +69,19 @@ export function ApiKeysTable({
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Key</TableHead>
-              <TableHead className="hidden md:table-cell">Used</TableHead>
-              <TableHead className="hidden md:table-cell">Cap</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+              <TableHead>名称</TableHead>
+              <TableHead>密钥</TableHead>
+              <TableHead className="hidden md:table-cell">已用</TableHead>
+              <TableHead className="hidden md:table-cell">上限</TableHead>
+              <TableHead>状态</TableHead>
+              <TableHead className="text-right">操作</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {tokens.length === 0 && (
               <TableRow>
                 <TableCell colSpan={6} className="py-10 text-center text-muted-fg">
-                  No tokens yet — create your first one.
+                  还没有密钥 —— 创建你的第一个吧。
                 </TableCell>
               </TableRow>
             )}
@@ -107,7 +107,7 @@ export function ApiKeysTable({
                           : 'danger'
                     }
                   >
-                    {t.status === 1 ? 'Active' : t.status === 2 ? 'Disabled' : 'Expired'}
+                    {t.status === 1 ? '启用' : t.status === 2 ? '已禁用' : '已过期'}
                   </Badge>
                 </TableCell>
                 <TableCell className="text-right">
@@ -120,7 +120,7 @@ export function ApiKeysTable({
                         setCopied(t.id);
                         setTimeout(() => setCopied(null), 1200);
                       }}
-                      aria-label="Copy"
+                      aria-label="复制"
                     >
                       {copied === t.id ? (
                         <Check className="h-3.5 w-3.5" />
@@ -132,7 +132,7 @@ export function ApiKeysTable({
                       variant="ghost"
                       size="icon"
                       onClick={() => onDelete(t.id)}
-                      aria-label="Delete"
+                      aria-label="删除"
                     >
                       <Trash2 className="h-3.5 w-3.5 text-danger" />
                     </Button>
@@ -158,16 +158,16 @@ function CreateTokenDialog({
   return (
     <DialogContent>
       <DialogHeader>
-        <DialogTitle>Create API token</DialogTitle>
+        <DialogTitle>创建 API 密钥</DialogTitle>
       </DialogHeader>
-      <label className="text-xs text-muted-fg">Name</label>
+      <label className="text-xs text-muted-fg">名称</label>
       <Input
         autoFocus
         placeholder="my-app-production"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
-      <label className="text-xs text-muted-fg">Quota cap (0 = unlimited)</label>
+      <label className="text-xs text-muted-fg">额度上限（0 = 不限）</label>
       <Input
         type="number"
         value={cap}
@@ -175,7 +175,7 @@ function CreateTokenDialog({
       />
       <DialogFooter>
         <DialogClose asChild>
-          <Button variant="ghost">Cancel</Button>
+          <Button variant="ghost">取消</Button>
         </DialogClose>
         <Button
           variant="primary"
@@ -189,7 +189,7 @@ function CreateTokenDialog({
             }
           }}
         >
-          {busy ? 'Creating…' : 'Create token'}
+          {busy ? '创建中…' : '创建密钥'}
         </Button>
       </DialogFooter>
     </DialogContent>

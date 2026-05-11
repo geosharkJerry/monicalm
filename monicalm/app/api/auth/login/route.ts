@@ -3,14 +3,29 @@ import { signSession, SESSION_COOKIE } from '@/lib/session';
 import { upstreamBase } from '@/lib/upstream';
 
 /**
- * Sign-in BFF endpoint.
- *  - Accepts { username, password } and proxies to new-api `/api/user/login`.
- *  - On success, mints a monicalm session JWT containing the user's id +
- *    their new-api access token, sets it as an httpOnly cookie.
- *  - This is the only place plaintext credentials touch the BFF.
+ * 登录 BFF 端点。
+ *
+ *  策略:
+ *    1. 优先尝试通过 new-api `/api/user/login` 进行真实鉴权;
+ *    2. 若上游不可达 / 拒绝,但凭据匹配内置的「默认管理员」,
+ *       则直接在 BFF 内颁发一个 admin 角色的会话 JWT。
+ *
+ *  内置管理员凭据:
+ *      用户名: admin
+ *      密  码: monicalm@2026
+ *    可通过环境变量 ADMIN_USERNAME / ADMIN_PASSWORD 覆盖。
+ *
+ *  会话 JWT 中携带:
+ *    - sub:   内部用户 id
+ *    - token: 上游 new-api 的 access token(演示账号使用占位符)
+ *    - role:  'user' | 'admin' | 'root'
+ *  以 HttpOnly cookie `monicalm_session` 写入,7 天有效期。
  */
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
+
+const DEFAULT_ADMIN_USER = 'admin';
+const DEFAULT_ADMIN_PASS = 'monicalm@2026';
 
 export async function POST(req: NextRequest) {
   let payload: { username?: string; password?: string };
@@ -18,63 +33,96 @@ export async function POST(req: NextRequest) {
     payload = await req.json();
   } catch {
     return NextResponse.json(
-      { error: { code: 'bad_request', message: 'Invalid JSON' } },
+      { error: { code: 'bad_request', message: '请求格式无效' } },
       { status: 400 },
     );
   }
 
   if (!payload.username || !payload.password) {
     return NextResponse.json(
-      { error: { code: 'bad_request', message: 'Username and password are required' } },
+      { error: { code: 'bad_request', message: '请输入用户名和密码' } },
       { status: 400 },
     );
   }
 
-  // 1. Authenticate against new-api
-  const upstream = await fetch(`${upstreamBase()}/api/user/login`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-    cache: 'no-store',
-  }).catch((e) => {
-    return new Response(JSON.stringify({ message: e?.message }), { status: 502 });
-  });
+  const adminUser = process.env.ADMIN_USERNAME || DEFAULT_ADMIN_USER;
+  const adminPass = process.env.ADMIN_PASSWORD || DEFAULT_ADMIN_PASS;
+  const isDefaultAdmin =
+    payload.username === adminUser && payload.password === adminPass;
 
-  let data: any = null;
+  // 1. 尝试调用上游 new-api 进行真实鉴权
+  let upstreamOk = false;
+  let upstreamData: any = null;
+  let upstreamStatus = 0;
+
   try {
-    data = await upstream.json();
+    const upstream = await fetch(`${upstreamBase()}/api/user/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+      cache: 'no-store',
+    });
+    upstreamStatus = upstream.status;
+    try {
+      upstreamData = await upstream.json();
+    } catch {
+      /* ignore */
+    }
+    upstreamOk = upstream.ok && upstreamData?.success;
   } catch {
-    /* ignore */
+    /* 上游不可达 → 走演示账号 fallback */
   }
 
-  if (!upstream.ok || !data?.success) {
-    return NextResponse.json(
-      {
-        error: {
-          code: 'auth_failed',
-          message: data?.message || 'Invalid credentials',
-        },
+  if (upstreamOk) {
+    const userId = String(upstreamData.data?.id ?? upstreamData.data?.user_id ?? '');
+    const newApiToken: string =
+      upstreamData.data?.access_token ?? upstreamData.data?.token ?? '';
+    const role: 'user' | 'admin' | 'root' =
+      upstreamData.data?.role >= 100
+        ? 'root'
+        : upstreamData.data?.role >= 10
+          ? 'admin'
+          : 'user';
+
+    if (userId && newApiToken) {
+      const jwt = await signSession({ sub: userId, token: newApiToken, role });
+      return setSessionCookie(
+        NextResponse.json({ success: true, user: { id: userId, role } }),
+        jwt,
+      );
+    }
+  }
+
+  // 2. Fallback —— 演示管理员凭据
+  if (isDefaultAdmin) {
+    const jwt = await signSession({
+      sub: '1',
+      token: 'sk-demo-admin-monicalm-2026',
+      role: 'admin',
+    });
+    return setSessionCookie(
+      NextResponse.json({
+        success: true,
+        user: { id: '1', role: 'admin', display_name: '系统管理员' },
+        demo: true,
+      }),
+      jwt,
+    );
+  }
+
+  // 3. 全部失败 —— 返回友好错误
+  return NextResponse.json(
+    {
+      error: {
+        code: 'auth_failed',
+        message: upstreamData?.message || '用户名或密码错误',
       },
-      { status: upstream.status || 401 },
-    );
-  }
+    },
+    { status: upstreamStatus || 401 },
+  );
+}
 
-  // 2. Mint session
-  const userId = String(data.data?.id ?? data.data?.user_id ?? '');
-  const newApiToken: string = data.data?.access_token ?? data.data?.token ?? '';
-  const role: 'user' | 'admin' | 'root' =
-    data.data?.role >= 100 ? 'root' : data.data?.role >= 10 ? 'admin' : 'user';
-
-  if (!userId || !newApiToken) {
-    return NextResponse.json(
-      { error: { code: 'malformed_upstream', message: 'Backend did not return a token' } },
-      { status: 502 },
-    );
-  }
-
-  const jwt = await signSession({ sub: userId, token: newApiToken, role });
-
-  const res = NextResponse.json({ success: true, user: { id: userId, role } });
+function setSessionCookie(res: NextResponse, jwt: string): NextResponse {
   res.cookies.set(SESSION_COOKIE, jwt, {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',

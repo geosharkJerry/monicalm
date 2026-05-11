@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 export function RightPanel({
   open,
   onClose,
-  title = 'Inspector',
+  title = '检查器',
   children,
 }: {
   open: boolean;
@@ -39,7 +39,7 @@ export function RightPanel({
               onClick={onClose}
               className="rounded-md px-2 py-1 text-xs text-muted-fg hover:bg-muted hover:text-fg"
             >
-              Close
+              关闭
             </button>
           </div>
           <div className="flex-1 overflow-y-auto p-4 text-sm">{children}</div>
@@ -56,7 +56,7 @@ export function ModelParamPanel() {
   return (
     <div className="space-y-6">
       <ParamSlider
-        label="Temperature"
+        label="温度 (Temperature)"
         value={temp}
         min={0}
         max={2}
@@ -64,7 +64,7 @@ export function ModelParamPanel() {
         onChange={setTemp}
       />
       <ParamSlider
-        label="Top P"
+        label="Top P (核采样)"
         value={topP}
         min={0}
         max={1}
@@ -72,7 +72,7 @@ export function ModelParamPanel() {
         onChange={setTopP}
       />
       <div className="hairline rounded-xl p-3 text-xs text-muted-fg">
-        Higher temperature → more creative. Lower Top P → more focused.
+        温度越高 → 越具创造性;Top P 越低 → 输出越聚焦。
       </div>
     </div>
   );
