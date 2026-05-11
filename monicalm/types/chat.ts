@@ -36,10 +36,24 @@ export interface ChatMessage {
   model?: string;
 }
 
+/** 支持的上游提供商集合,与 `lib/models-catalog.ts` 保持一致。 */
+export type ModelProvider =
+  | 'openai'
+  | 'anthropic'
+  | 'google'
+  | 'deepseek'
+  | 'xai'
+  | 'meta'
+  | 'mistral'
+  | 'alibaba'
+  | 'moonshot'
+  | 'zhipu'
+  | 'custom';
+
 export interface ModelOption {
   id: string;
   label: string;
-  provider: 'openai' | 'anthropic' | 'google' | 'custom';
+  provider: ModelProvider;
   description?: string;
   /** Price multipliers vs base unit. */
   inputRate?: number;

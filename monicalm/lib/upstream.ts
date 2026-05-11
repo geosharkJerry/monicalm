@@ -7,7 +7,9 @@
  */
 
 export function upstreamBase(): string {
-  return process.env.NEW_API_BASE_URL || 'http://127.0.0.1:3000';
+  // 返回空串表示「未配置上游」,调用方应跳过远程请求,
+  // 直接走演示账号回退,避免在 Edge 上 fetch 一个不可达的本地地址。
+  return process.env.NEW_API_BASE_URL || '';
 }
 
 /** Build standard headers for an upstream call. */

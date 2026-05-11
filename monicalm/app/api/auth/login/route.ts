@@ -6,8 +6,9 @@ import { upstreamBase } from '@/lib/upstream';
  * 登录 BFF 端点。
  *
  *  策略:
- *    1. 优先尝试通过 new-api `/api/user/login` 进行真实鉴权;
- *    2. 若上游不可达 / 拒绝,但凭据匹配内置的「默认管理员」,
+ *    1. 若配置了 NEW_API_BASE_URL,优先通过 new-api `/api/user/login`
+ *       进行真实鉴权;
+ *    2. 若上游未配置 / 不可达 / 拒绝,但凭据匹配内置的「默认管理员」,
  *       则直接在 BFF 内颁发一个 admin 角色的会话 JWT。
  *
  *  内置管理员凭据:
@@ -15,11 +16,8 @@ import { upstreamBase } from '@/lib/upstream';
  *      密  码: monicalm@2026
  *    可通过环境变量 ADMIN_USERNAME / ADMIN_PASSWORD 覆盖。
  *
- *  会话 JWT 中携带:
- *    - sub:   内部用户 id
- *    - token: 上游 new-api 的 access token(演示账号使用占位符)
- *    - role:  'user' | 'admin' | 'root'
- *  以 HttpOnly cookie `monicalm_session` 写入,7 天有效期。
+ *  顶层异常一律捕获并返回 JSON,以避免 Edge runtime 抛错时
+ *  Cloudflare 返回 HTML 错误页导致前端 `res.json()` 解析失败。
  */
 export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
@@ -28,6 +26,24 @@ const DEFAULT_ADMIN_USER = 'admin';
 const DEFAULT_ADMIN_PASS = 'monicalm@2026';
 
 export async function POST(req: NextRequest) {
+  try {
+    return await handle(req);
+  } catch (err: any) {
+    // 关键:任何意外异常都必须返回合法 JSON,否则前端解析会炸。
+    return NextResponse.json(
+      {
+        error: {
+          code: 'server_error',
+          message: '服务暂时不可用,请稍后再试',
+          detail: err?.message ?? String(err),
+        },
+      },
+      { status: 500 },
+    );
+  }
+}
+
+async function handle(req: NextRequest): Promise<NextResponse> {
   let payload: { username?: string; password?: string };
   try {
     payload = await req.json();
@@ -50,31 +66,40 @@ export async function POST(req: NextRequest) {
   const isDefaultAdmin =
     payload.username === adminUser && payload.password === adminPass;
 
-  // 1. 尝试调用上游 new-api 进行真实鉴权
+  // 1. 仅当配置了上游地址时,才尝试调用 new-api 进行真实鉴权
   let upstreamOk = false;
   let upstreamData: any = null;
   let upstreamStatus = 0;
+  const base = upstreamBase();
 
-  try {
-    const upstream = await fetch(`${upstreamBase()}/api/user/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      cache: 'no-store',
-    });
-    upstreamStatus = upstream.status;
+  if (base) {
     try {
-      upstreamData = await upstream.json();
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 5000);
+      const upstream = await fetch(`${base}/api/user/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        cache: 'no-store',
+        signal: ctrl.signal,
+      });
+      clearTimeout(timer);
+      upstreamStatus = upstream.status;
+      try {
+        upstreamData = await upstream.json();
+      } catch {
+        /* 上游返回非 JSON,忽略 */
+      }
+      upstreamOk = upstream.ok && upstreamData?.success;
     } catch {
-      /* ignore */
+      /* 上游不可达 / 超时 → 走演示账号 fallback */
     }
-    upstreamOk = upstream.ok && upstreamData?.success;
-  } catch {
-    /* 上游不可达 → 走演示账号 fallback */
   }
 
   if (upstreamOk) {
-    const userId = String(upstreamData.data?.id ?? upstreamData.data?.user_id ?? '');
+    const userId = String(
+      upstreamData.data?.id ?? upstreamData.data?.user_id ?? '',
+    );
     const newApiToken: string =
       upstreamData.data?.access_token ?? upstreamData.data?.token ?? '';
     const role: 'user' | 'admin' | 'root' =

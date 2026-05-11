@@ -39,8 +39,15 @@ function LoginForm() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password }),
       });
-      const data = await res.json();
-      if (!res.ok || !data.success) {
+      // 后端在 Edge runtime 偶发返回 HTML 错误页时,要先安全解析
+      const raw = await res.text();
+      let data: any = null;
+      try {
+        data = raw ? JSON.parse(raw) : null;
+      } catch {
+        throw new Error(`服务异常 (HTTP ${res.status}),请稍后再试`);
+      }
+      if (!res.ok || !data?.success) {
         throw new Error(data?.error?.message ?? '用户名或密码错误');
       }
       router.replace(next);

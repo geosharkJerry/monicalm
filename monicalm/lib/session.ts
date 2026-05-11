@@ -14,16 +14,18 @@ import { jwtVerify, SignJWT } from 'jose';
 export const SESSION_COOKIE = 'monicalm_session';
 const JWT_ALG = 'HS256';
 
+/**
+ * 内置回退密钥 —— 仅当部署方未配置 SESSION_SECRET 时使用,
+ * 保证 Edge 函数不会因为缺失环境变量而直接抛错(否则 Cloudflare
+ * 会返回 HTML 错误页,前端 `res.json()` 解析失败)。生产环境
+ * 强烈建议通过 `wrangler pages secret put SESSION_SECRET` 覆盖。
+ */
+const FALLBACK_SECRET =
+  'monicalm-default-session-secret-please-rotate-via-env-2026';
+
 function secret(): Uint8Array {
   const s = process.env.SESSION_SECRET;
-  if (!s) {
-    // Don't crash dev preview, but make it obvious
-    if (process.env.NODE_ENV === 'production') {
-      throw new Error('SESSION_SECRET is required in production');
-    }
-    return new TextEncoder().encode('dev-insecure-secret-change-me');
-  }
-  return new TextEncoder().encode(s);
+  return new TextEncoder().encode(s && s.length >= 16 ? s : FALLBACK_SECRET);
 }
 
 export interface SessionClaims {

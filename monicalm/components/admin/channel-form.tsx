@@ -7,6 +7,10 @@ import { Input } from '@/components/ui/input';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
 import type { Channel } from '@/types/api';
+import {
+  PROVIDER_TYPES,
+  COMMON_MODELS as CATALOG_COMMON_MODELS,
+} from '@/lib/models-catalog';
 
 /**
  * Channel configuration form — the core "upstream provider" registration UI.
@@ -19,27 +23,9 @@ import type { Channel } from '@/types/api';
  *
  * Emits a fully validated `Channel` shape on submit.
  */
-const PROVIDER_TYPES = [
-  { id: 1, label: 'OpenAI' },
-  { id: 14, label: 'Anthropic' },
-  { id: 24, label: 'Google Gemini' },
-  { id: 28, label: 'Mistral' },
-  { id: 36, label: 'DeepSeek' },
-  { id: 41, label: 'xAI Grok' },
-  { id: 99, label: 'Custom (OpenAI-compatible)' },
-];
 
-const COMMON_MODELS = [
-  'gpt-4o',
-  'gpt-4o-mini',
-  'gpt-4-turbo',
-  'claude-3-5-sonnet',
-  'claude-3-5-haiku',
-  'gemini-1.5-pro',
-  'gemini-1.5-flash',
-  'deepseek-chat',
-  'grok-2',
-];
+/** 渠道表单常用模型快捷标签 —— 来自集中目录。 */
+const COMMON_MODELS = CATALOG_COMMON_MODELS;
 
 export interface ChannelFormProps {
   initial?: Partial<Channel>;

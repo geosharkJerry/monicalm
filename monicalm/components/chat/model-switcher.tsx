@@ -12,21 +12,14 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { cn } from '@/lib/utils';
 import type { AgentOption, ModelOption } from '@/types/chat';
+import {
+  DEFAULT_MODELS as CATALOG_MODELS,
+  DEFAULT_AGENTS as CATALOG_AGENTS,
+} from '@/lib/models-catalog';
 
-/** Default catalog — overridden by /api/models in production. */
-export const DEFAULT_MODELS: ModelOption[] = [
-  { id: 'gpt-4o', label: 'GPT-4o', provider: 'openai', description: '多模态、响应快', inputRate: 1, outputRate: 3 },
-  { id: 'gpt-4o-mini', label: 'GPT-4o mini', provider: 'openai', description: '低成本、轻量', inputRate: 0.15, outputRate: 0.6 },
-  { id: 'claude-3-5-sonnet', label: 'Claude 3.5 Sonnet', provider: 'anthropic', description: '推理与代码', inputRate: 3, outputRate: 15 },
-  { id: 'claude-3-5-haiku', label: 'Claude 3.5 Haiku', provider: 'anthropic', description: '轻盈快速', inputRate: 0.8, outputRate: 4 },
-  { id: 'gemini-1.5-pro', label: 'Gemini 1.5 Pro', provider: 'google', description: '超长上下文', inputRate: 1.25, outputRate: 5 },
-];
-
-export const DEFAULT_AGENTS: AgentOption[] = [
-  { id: 'default', name: '普通对话', emoji: '✦', modelId: 'gpt-4o-mini', systemPrompt: '你是一位乐于助人的智能助手。' },
-  { id: 'researcher', name: '深度研究员', emoji: '◍', modelId: 'claude-3-5-sonnet', systemPrompt: '你是一名严谨的研究员，请始终标明资料出处。' },
-  { id: 'coder', name: '代码评审官', emoji: '◰', modelId: 'gpt-4o', systemPrompt: '你是一名资深工程师，请以代码评审的严谨度提出反馈。' },
-];
+/** Default catalog — 单一来源:`lib/models-catalog.ts`,集中管理所有最新模型版本。 */
+export const DEFAULT_MODELS: ModelOption[] = CATALOG_MODELS;
+export const DEFAULT_AGENTS: AgentOption[] = CATALOG_AGENTS;
 
 export function ModelSwitcher({
   models = DEFAULT_MODELS,
