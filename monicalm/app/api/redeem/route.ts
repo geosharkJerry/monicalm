@@ -6,7 +6,7 @@ import { forwardRequest } from '@/lib/upstream';
  * `POST /api/redeem` — credit a redeem code to the signed-in user.
  * Proxies to new-api `/api/user/topup`.
  */
-export const runtime = 'nodejs';
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {

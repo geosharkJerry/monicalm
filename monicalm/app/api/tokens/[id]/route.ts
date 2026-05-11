@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { parseCookies, verifySession, SESSION_COOKIE } from '@/lib/session';
 import { forwardRequest } from '@/lib/upstream';
 
-export const runtime = 'nodejs';
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 async function authToken(req: NextRequest) {

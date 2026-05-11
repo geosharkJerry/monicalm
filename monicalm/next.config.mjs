@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  // Cloudflare Pages does not optimize remote images — disable Next's
+  // built-in optimizer so we don't try to invoke sharp at the edge.
+  images: { unoptimized: true },
   experimental: {
     optimizePackageImports: ['lucide-react', 'recharts'],
   },

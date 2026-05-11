@@ -35,3 +35,10 @@ data/
 .test
 token_estimator_test.go
 skills-lock.json
+
+# Next.js / Cloudflare Pages build artifacts
+monicalm/.next/
+monicalm/.vercel/
+monicalm/node_modules/
+monicalm/next-env.d.ts
+node_modules/

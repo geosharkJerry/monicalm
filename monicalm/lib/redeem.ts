@@ -11,8 +11,9 @@ const ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
 
 function randomCode(prefix = 'MONICA'): string {
   const buf = new Uint8Array(12);
-  // Works in both browsers and Edge / Node 18+ runtimes
-  (globalThis.crypto ?? require('crypto').webcrypto).getRandomValues(buf);
+  // `globalThis.crypto` is available in browsers, Edge runtime, Workers,
+  // and Node 18+. No conditional `require` — that breaks Edge bundlers.
+  globalThis.crypto.getRandomValues(buf);
   const body = Array.from(buf, (b) => ALPHABET[b % ALPHABET.length])
     .join('')
     .match(/.{1,4}/g)!

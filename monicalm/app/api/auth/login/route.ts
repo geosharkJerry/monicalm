@@ -9,7 +9,7 @@ import { upstreamBase } from '@/lib/upstream';
  *    their new-api access token, sets it as an httpOnly cookie.
  *  - This is the only place plaintext credentials touch the BFF.
  */
-export const runtime = 'nodejs';
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {

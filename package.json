@@ -1,0 +1,16 @@
+{
+  "name": "monicalm-root",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Root entry for Cloudflare Pages — delegates to the monicalm/ Next.js app",
+  "scripts": {
+    "install:app": "cd monicalm && npm install --legacy-peer-deps",
+    "build": "npm run install:app && cd monicalm && NODE_OPTIONS=--max-old-space-size=3072 npx @cloudflare/next-on-pages",
+    "dev": "cd monicalm && npm run dev",
+    "deploy": "cd monicalm && npm run pages:deploy",
+    "typecheck": "cd monicalm && npm run typecheck"
+  },
+  "engines": {
+    "node": ">=18.17.0"
+  }
+}

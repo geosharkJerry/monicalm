@@ -8,8 +8,19 @@ import { Input } from '@/components/ui/input';
 /**
  * Minimal sign-in screen.
  * Posts to `/api/auth/login` which mints the `monicalm_session` JWT cookie.
+ *
+ * `useSearchParams()` requires a Suspense boundary when statically rendered
+ * (Next.js 14+), so the form is wrapped in <Suspense> below.
  */
 export default function LoginPage() {
+  return (
+    <React.Suspense fallback={<LoginSkeleton />}>
+      <LoginForm />
+    </React.Suspense>
+  );
+}
+
+function LoginForm() {
   const router = useRouter();
   const params = useSearchParams();
   const next = params.get('next') ?? '/chat';
@@ -91,6 +102,20 @@ export default function LoginPage() {
           {busy ? 'Signing in…' : 'Continue'}
         </Button>
       </form>
+    </div>
+  );
+}
+
+function LoginSkeleton() {
+  return (
+    <div className="grid min-h-dvh place-items-center px-6">
+      <div className="w-full max-w-sm space-y-5 rounded-2xl hairline bg-surface/70 p-8 shadow-glass">
+        <div className="h-3 w-16 rounded bg-muted" />
+        <div className="h-6 w-40 rounded bg-muted" />
+        <div className="h-9 rounded-xl bg-muted/60" />
+        <div className="h-9 rounded-xl bg-muted/60" />
+        <div className="h-10 rounded-full bg-muted/60" />
+      </div>
     </div>
   );
 }

@@ -6,7 +6,7 @@ import { forwardRequest } from '@/lib/upstream';
  * `/api/tokens` — list & create user API tokens.
  * Backed by new-api `/api/token` endpoints.
  */
-export const runtime = 'nodejs';
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 async function authToken(req: NextRequest) {

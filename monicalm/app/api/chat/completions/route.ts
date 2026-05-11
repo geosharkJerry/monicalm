@@ -18,7 +18,7 @@ import { forwardRequest, toFriendlyError } from '@/lib/upstream';
  * (Edge fetch also works but Node is more predictable for long-lived SSE.)
  */
 
-export const runtime = 'nodejs';
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 export async function POST(req: NextRequest) {

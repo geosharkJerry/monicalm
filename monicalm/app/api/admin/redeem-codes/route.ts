@@ -10,7 +10,7 @@ import type { GeneratedCode } from '@/lib/redeem';
  * without round-trips) and then POSTs the final batch here. We chunk them
  * to avoid overwhelming the upstream DB with a single huge transaction.
  */
-export const runtime = 'nodejs';
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 const CHUNK = 200;

@@ -1,0 +1,8 @@
+# Root-level Cloudflare Pages config for monicalm.
+# Cloudflare Pages looks here when the build platform inspects the
+# repository root. The actual Next.js app lives in `monicalm/`.
+
+name = "monicalm"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+pages_build_output_dir = "monicalm/.vercel/output/static"

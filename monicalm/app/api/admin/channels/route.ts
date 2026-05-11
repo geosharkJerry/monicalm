@@ -6,7 +6,7 @@ import { forwardRequest } from '@/lib/upstream';
  * Admin · channels list + create.
  * Proxies to new-api `/api/channel/`.
  */
-export const runtime = 'nodejs';
+export const runtime = 'edge';
 export const dynamic = 'force-dynamic';
 
 async function authAdmin(req: NextRequest) {
