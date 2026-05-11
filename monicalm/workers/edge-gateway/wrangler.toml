@@ -1,0 +1,32 @@
+name = "monicalm-edge-gateway"
+main = "src/index.ts"
+compatibility_date = "2024-09-23"
+compatibility_flags = ["nodejs_compat"]
+
+# Public hostname routing — adjust to your zone.
+# routes = [
+#   { pattern = "api.monicalm.example.com/*", zone_name = "monicalm.example.com" }
+# ]
+
+# -------- KV bindings --------
+# USER_QUOTA_KV: { "<userId>": { "remain_quota": <int64>, "ts": <unix> } }
+# RATE_LIMIT_KV: ephemeral, used for IP+token bucket counters
+[[kv_namespaces]]
+binding = "USER_QUOTA_KV"
+id      = "REPLACE_WITH_KV_NS_ID"
+
+[[kv_namespaces]]
+binding = "RATE_LIMIT_KV"
+id      = "REPLACE_WITH_RATE_KV_NS_ID"
+
+# -------- Non-secret env vars --------
+[vars]
+UPSTREAM_BASE_URL = "https://newapi.monicalm.internal"
+JWT_ISSUER        = "monicalm"
+# Edge-side rate limits
+RATE_LIMIT_RPM_IP    = "120"
+RATE_LIMIT_RPM_TOKEN = "60"
+
+# -------- Secrets (set with: wrangler secret put SESSION_SECRET) --------
+# SESSION_SECRET — same HMAC secret used by the Next.js BFF to sign session JWTs.
+# CF_INTERNAL_TOKEN — optional, validated when the Go backend pushes KV updates.

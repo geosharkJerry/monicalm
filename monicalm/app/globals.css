@@ -1,0 +1,121 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* -------- Design tokens (Genspark-aligned) -------- */
+@layer base {
+  :root {
+    /* Light mode — pure white surfaces, hairline borders */
+    --bg: 0 0% 100%;
+    --surface: 0 0% 100%;
+    --surface-2: 0 0% 98%;
+    --fg: 0 0% 8%;
+    --muted: 0 0% 96%;
+    --muted-fg: 0 0% 42%;
+    --line: 0 0% 92%;
+    --accent: 0 0% 8%;
+    --danger: 0 72% 51%;
+  }
+
+  .dark {
+    /* Dark mode — pure black, faint dark gray borders */
+    --bg: 0 0% 4%;
+    --surface: 0 0% 6%;
+    --surface-2: 0 0% 8%;
+    --fg: 0 0% 96%;
+    --muted: 0 0% 12%;
+    --muted-fg: 0 0% 60%;
+    --line: 0 0% 14%;
+    --accent: 0 0% 96%;
+    --danger: 0 72% 60%;
+  }
+
+  * {
+    border-color: hsl(var(--line));
+  }
+
+  html,
+  body {
+    background-color: hsl(var(--bg));
+    color: hsl(var(--fg));
+    font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: hsl(var(--fg) / 0.15);
+  }
+
+  /* Hairline scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: hsl(var(--line));
+    border-radius: 999px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+}
+
+/* -------- Reusable utilities -------- */
+@layer utilities {
+  .glass {
+    background: hsl(var(--surface) / 0.72);
+    backdrop-filter: saturate(140%) blur(14px);
+    -webkit-backdrop-filter: saturate(140%) blur(14px);
+    border-bottom: 1px solid hsl(var(--line));
+  }
+
+  .hairline {
+    border: 1px solid hsl(var(--line));
+  }
+
+  .breathe-dot {
+    @apply inline-block h-1.5 w-1.5 rounded-full bg-fg animate-breathe;
+  }
+
+  .shimmer-text {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--muted-fg)) 0%,
+      hsl(var(--fg)) 50%,
+      hsl(var(--muted-fg)) 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    @apply animate-shimmer;
+  }
+}
+
+/* react-markdown / KaTeX / hljs minor tweaks */
+.prose-monica pre {
+  background: hsl(var(--surface-2));
+  border: 1px solid hsl(var(--line));
+  border-radius: 12px;
+  padding: 14px 16px;
+  overflow-x: auto;
+  font-size: 13px;
+}
+.prose-monica code:not(pre code) {
+  background: hsl(var(--muted));
+  padding: 1px 6px;
+  border-radius: 6px;
+  font-size: 0.9em;
+}
+.prose-monica table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.prose-monica th,
+.prose-monica td {
+  border: 1px solid hsl(var(--line));
+  padding: 6px 10px;
+  text-align: left;
+}
