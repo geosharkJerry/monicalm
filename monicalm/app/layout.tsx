@@ -9,7 +9,10 @@ export const metadata: Metadata = {
   description:
     '基于 new-api 网关的 Genspark 风格多模型 AI 智能体工作台。',
   applicationName: 'monicalm',
-  icons: { icon: '/favicon.svg' },
+  icons: {
+    icon: [{ url: '/favicon.svg', type: 'image/svg+xml' }],
+    apple: [{ url: '/apple-touch-icon.svg', type: 'image/svg+xml' }],
+  },
 };
 
 export const viewport: Viewport = {

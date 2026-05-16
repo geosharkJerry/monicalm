@@ -1,9 +1,11 @@
 'use client';
 
 import * as React from 'react';
+import Link from 'next/link';
 import { Search, Sun, Moon, PanelRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { BrandMark } from '@/components/brand/logo';
 
 /**
  * Glass top bar — `backdrop-blur` over translucent surface.
@@ -27,7 +29,18 @@ export function TopBar({
         'glass',
       )}
     >
-      <div className="flex items-center gap-2 text-sm">
+      <Link
+        href="/"
+        aria-label="monicalm 首页"
+        className="flex items-center gap-2 text-sm transition-opacity hover:opacity-80 md:hidden"
+        style={{ ['--brand-mark-cut' as any]: 'var(--bg, #0a0a0a)' }}
+      >
+        <span className="grid h-6 w-6 place-items-center rounded-md bg-fg text-bg">
+          <BrandMark className="h-3.5 w-3.5" />
+        </span>
+        <span className="font-medium tracking-tight">monicalm</span>
+      </Link>
+      <div className="hidden items-center gap-2 text-sm md:flex">
         <span className="text-muted-fg">monicalm</span>
         {title && (
           <>

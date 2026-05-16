@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- monicalm brand mark: crown + circuit nodes + ECG waveform + base. -->
+  <style>
+    /* 自动跟随系统主题:浅色背景用黑色,深色背景用白色 */
+    .fg { fill: #0a0a0a; }
+    .stroke { stroke: #0a0a0a; }
+    .cut { stroke: #ffffff; }
+    @media (prefers-color-scheme: dark) {
+      .fg { fill: #fafafa; }
+      .stroke { stroke: #fafafa; }
+      .cut { stroke: #0a0a0a; }
+    }
+  </style>
+
+  <!-- circuit nodes -->
+  <circle class="stroke" cx="22" cy="14" r="2.2" fill="none" stroke-width="1.6"/>
+  <path class="stroke" d="M22 16.2 L22 19 L26 21" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle class="stroke" cx="32" cy="9" r="2.2" fill="none" stroke-width="1.6"/>
+  <path class="stroke" d="M32 11.2 L32 18" fill="none" stroke-width="1.6" stroke-linecap="round"/>
+  <circle class="stroke" cx="42" cy="14" r="2.2" fill="none" stroke-width="1.6"/>
+  <path class="stroke" d="M42 16.2 L42 19 L38 21" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- crown body -->
+  <path class="fg" d="M 8 46 L 14 22 L 24 30 L 32 18 L 40 30 L 50 22 L 56 46 Z"/>
+
+  <!-- ECG waveform cutout -->
+  <path class="cut" d="M 14 38 L 20 38 L 23 34 L 26 41 L 30 30 L 34 44 L 38 34 L 41 38 L 50 38"
+        fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- base -->
+  <rect class="fg" x="8" y="46" width="48" height="6"/>
+  <rect class="fg" x="10" y="54" width="44" height="2.5"/>
+</svg>

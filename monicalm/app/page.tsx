@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { ArrowUpRight, Sparkles, Bot, KeyRound } from 'lucide-react';
+import { BrandMark } from '@/components/brand/logo';
 
 /**
  * Landing / Explore page.
@@ -9,6 +10,12 @@ export default function Home() {
   return (
     <div className="mx-auto max-w-5xl px-6 py-16">
       <section className="mb-16 animate-fade-in">
+        <div
+          className="mb-6 grid h-14 w-14 place-items-center rounded-2xl bg-fg text-bg shadow-glass"
+          style={{ ['--brand-mark-cut' as any]: 'var(--bg, #0a0a0a)' }}
+        >
+          <BrandMark className="h-8 w-8" />
+        </div>
         <span className="hairline inline-flex items-center gap-1.5 rounded-full bg-surface/70 px-3 py-1 text-xs text-muted-fg">
           <span className="breathe-dot" /> monicalm · v0.1
         </span>

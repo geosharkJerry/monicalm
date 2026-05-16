@@ -13,6 +13,7 @@ import {
   PanelLeft,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { BrandMark } from '@/components/brand/logo';
 
 /**
  * Left rail navigation.
@@ -44,11 +45,21 @@ export function Sidebar({
     >
       {/* Brand */}
       <div className="flex h-14 items-center gap-2 px-4">
-        <div className="h-7 w-7 rounded-lg bg-fg text-bg grid place-items-center text-[11px] font-semibold tracking-tight">
-          m
-        </div>
+        <Link
+          href="/"
+          aria-label="monicalm 首页"
+          className="grid h-7 w-7 place-items-center rounded-lg bg-fg text-bg shadow-glass transition-opacity hover:opacity-90"
+          style={{ ['--brand-mark-cut' as any]: 'var(--bg, #0a0a0a)' }}
+        >
+          <BrandMark className="h-4 w-4" />
+        </Link>
         {!collapsed && (
-          <span className="text-sm font-medium tracking-tight">monicalm</span>
+          <Link
+            href="/"
+            className="text-sm font-medium tracking-tight transition-opacity hover:opacity-80"
+          >
+            monicalm
+          </Link>
         )}
         <button
           onClick={onToggle}

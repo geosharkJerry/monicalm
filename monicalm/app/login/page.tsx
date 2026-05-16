@@ -4,6 +4,7 @@ import * as React from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { BrandMark } from '@/components/brand/logo';
 
 /**
  * Minimal sign-in screen.
@@ -64,8 +65,14 @@ function LoginForm() {
         onSubmit={submit}
         className="w-full max-w-sm space-y-5 rounded-2xl hairline bg-surface/70 p-8 shadow-glass animate-fade-in"
       >
-        <div>
-          <div className="text-xs uppercase tracking-wider text-muted-fg">
+        <div className="flex flex-col items-center text-center">
+          <span
+            className="grid h-12 w-12 place-items-center rounded-2xl bg-fg text-bg shadow-glass"
+            style={{ ['--brand-mark-cut' as any]: 'var(--bg, #0a0a0a)' }}
+          >
+            <BrandMark className="h-7 w-7" />
+          </span>
+          <div className="mt-4 text-xs uppercase tracking-wider text-muted-fg">
             monicalm
           </div>
           <h1 className="mt-1 text-2xl font-medium tracking-tight">

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180">
+  <!-- iOS-style rounded-rect background + monicalm mark -->
+  <rect width="180" height="180" rx="40" fill="#0a0a0a"/>
+  <g transform="translate(28 28) scale(1.95)">
+    <circle cx="22" cy="14" r="2.2" fill="none" stroke="#fafafa" stroke-width="1.6"/>
+    <path d="M22 16.2 L22 19 L26 21" fill="none" stroke="#fafafa" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <circle cx="32" cy="9" r="2.2" fill="none" stroke="#fafafa" stroke-width="1.6"/>
+    <path d="M32 11.2 L32 18" fill="none" stroke="#fafafa" stroke-width="1.6" stroke-linecap="round"/>
+    <circle cx="42" cy="14" r="2.2" fill="none" stroke="#fafafa" stroke-width="1.6"/>
+    <path d="M42 16.2 L42 19 L38 21" fill="none" stroke="#fafafa" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+    <path fill="#fafafa" d="M 8 46 L 14 22 L 24 30 L 32 18 L 40 30 L 50 22 L 56 46 Z"/>
+    <path d="M 14 38 L 20 38 L 23 34 L 26 41 L 30 30 L 34 44 L 38 34 L 41 38 L 50 38"
+          fill="none" stroke="#0a0a0a" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+    <rect fill="#fafafa" x="8" y="46" width="48" height="6"/>
+    <rect fill="#fafafa" x="10" y="54" width="44" height="2.5"/>
+  </g>
+</svg>
