@@ -257,6 +257,13 @@ func SetApiRouter(router *gin.Engine) {
 			channelRoute.POST("/upstream_updates/detect", controller.DetectChannelUpstreamModelUpdates)
 			channelRoute.POST("/upstream_updates/detect_all", controller.DetectAllChannelUpstreamModelUpdates)
 		}
+
+		teacherRoute := apiRouter.Group("/v1/teacher")
+		teacherRoute.Use(middleware.UserAuth())
+		{
+			teacherRoute.PATCH("/submissions/:id/approve", controller.ApproveSubmission)
+		}
+
 		tokenRoute := apiRouter.Group("/token")
 		tokenRoute.Use(middleware.UserAuth())
 		{
