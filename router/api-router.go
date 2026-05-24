@@ -198,6 +198,12 @@ func SetApiRouter(router *gin.Engine) {
 			customOAuthRoute.PUT("/:id", controller.UpdateCustomOAuthProvider)
 			customOAuthRoute.DELETE("/:id", controller.DeleteCustomOAuthProvider)
 		}
+		adminAnalyticsRoute := apiRouter.Group("/v1/admin/analytics")
+		adminAnalyticsRoute.Use(middleware.RootAuth())
+		{
+			adminAnalyticsRoute.GET("/dashboard", controller.GetAdminAnalyticsDashboard)
+		}
+
 		performanceRoute := apiRouter.Group("/performance")
 		performanceRoute.Use(middleware.RootAuth())
 		{
