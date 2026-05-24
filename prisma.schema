@@ -1,0 +1,247 @@
+/// monicalm.com 校园教育版 Prisma Schema
+/// 说明：
+/// 1) 本 Schema 聚焦核心业务实体（用户、会员、订单、班级、课题、提交、剧生生联动）。
+/// 2) 已包含外键约束、唯一约束与常用索引。
+/// 3) inviteCode 约束：应用层保证 6 位格式（Prisma 无原生长度检查约束）。
+/// 4) generatedAssets 使用 Json 类型，适合存放结构化生成结果与多媒体链接。
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql" // 可按部署环境切换为 mysql/sqlite
+  url      = env("DATABASE_URL")
+}
+
+/// 用户角色枚举
+/// - ADMIN: 平台管理员
+/// - SCHOOL_ADMIN: 学校管理员
+/// - TEACHER: 教师
+/// - STUDENT: 学生
+enum UserRole {
+  ADMIN
+  SCHOOL_ADMIN
+  TEACHER
+  STUDENT
+}
+
+/// 订单状态
+/// - PENDING: 待支付
+/// - PAID: 已支付
+/// - FAILED: 支付失败
+enum OrderStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+/// 订单类型
+/// - VIP_SUBSCRIPTION: 会员订阅
+/// - TOKEN_TOPUP: 算力点数充值
+enum OrderType {
+  VIP_SUBSCRIPTION
+  TOKEN_TOPUP
+}
+
+/// 实训 Agent 类型
+/// - DRAMA: 剧本/剧情创作
+/// - MUSIC: 音乐创作
+/// - AD: 广告创作
+/// - GAME: 游戏内容创作
+enum AgentType {
+  DRAMA
+  MUSIC
+  AD
+  GAME
+}
+
+/// 学生提交状态
+/// - SUBMITTED: 已提交
+/// - GRADED: 已评分
+/// - PUSHED_TO_JUSHENGSHENG: 已推送至剧生生
+enum SubmissionStatus {
+  SUBMITTED
+  GRADED
+  PUSHED_TO_JUSHENGSHENG
+}
+
+/// 用户表
+model User {
+  /// 主键 ID（CUID）
+  id           String       @id @default(cuid())
+  /// 邮箱（唯一）
+  email        String       @unique
+  /// 手机号（唯一，可空）
+  phone        String?      @unique
+  /// 密码哈希
+  passwordHash String
+  /// 角色
+  role         UserRole
+  /// 创建时间
+  createdAt    DateTime     @default(now())
+
+  /// 一对一：会员信息
+  membership   Membership?
+  /// 一对多：订单
+  orders       Order[]
+  /// 一对多：教师创建的班级
+  teachingClasses Class[]   @relation("ClassTeacher")
+  /// 一对多：学生实训提交
+  submissions  Submission[] @relation("StudentSubmissions")
+
+  @@index([role])
+  @@index([createdAt])
+}
+
+/// 会员表（与 User 一对一）
+model Membership {
+  /// 主键 ID（CUID）
+  id            String    @id @default(cuid())
+  /// 用户 ID（唯一外键，保证一对一）
+  userId        String    @unique
+  /// 是否为 VIP
+  isVIP         Boolean   @default(false)
+  /// VIP 到期时间
+  vipExpiresAt  DateTime?
+  /// 当前剩余算力点数
+  currentTokens Int       @default(0)
+
+  /// 关联用户
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([isVIP])
+}
+
+/// 订单表
+model Order {
+  /// 主键 ID（CUID）
+  id        String      @id @default(cuid())
+  /// 下单用户 ID
+  userId    String
+  /// 唯一订单号
+  orderNo   String      @unique
+  /// 订单金额（Decimal）
+  amount    Decimal     @db.Decimal(12, 2)
+  /// 订单状态
+  status    OrderStatus @default(PENDING)
+  /// 订单类型
+  type      OrderType
+  /// 创建时间
+  createdAt DateTime    @default(now())
+
+  /// 关联用户
+  user      User        @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([orderNo])
+  @@index([userId, createdAt])
+  @@index([status, createdAt])
+}
+
+/// 班级表
+model Class {
+  /// 主键 ID（CUID）
+  id         String       @id @default(cuid())
+  /// 班级名称
+  className  String
+  /// 6 位唯一邀请码（格式由应用层校验）
+  inviteCode String       @unique
+  /// 班主任/授课教师 ID
+  teacherId  String
+
+  /// 关联教师
+  teacher    User         @relation("ClassTeacher", fields: [teacherId], references: [id], onDelete: Restrict, onUpdate: Cascade)
+  /// 一对多：班级课题
+  assignments Assignment[]
+
+  @@index([inviteCode])
+  @@index([teacherId])
+}
+
+/// 实训课题表
+model Assignment {
+  /// 主键 ID（CUID）
+  id                  String      @id @default(cuid())
+  /// 所属班级 ID
+  classId             String
+  /// 课题标题
+  title               String
+  /// 课题内容
+  content             String
+  /// Agent 类型
+  agentType           AgentType
+  /// 每个学生可消耗的最大 token
+  maxTokensPerStudent Int
+  /// 截止时间
+  deadline            DateTime
+  /// 创建时间
+  createdAt           DateTime    @default(now())
+
+  /// 关联班级
+  class               Class       @relation(fields: [classId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  /// 一对多：学生提交
+  submissions         Submission[]
+
+  @@index([classId, createdAt])
+  @@index([deadline])
+  @@index([agentType])
+}
+
+/// 学生实训提交表
+model Submission {
+  /// 主键 ID（CUID）
+  id              String           @id @default(cuid())
+  /// 对应课题 ID
+  assignmentId    String
+  /// 学生 ID
+  studentId       String
+  /// 学生说明
+  studentNotes    String?
+  /// 生成资产 JSON（剧本、音频、视频、链接等）
+  generatedAssets Json?
+  /// AI 评分
+  aiScore         Decimal?         @db.Decimal(5, 2)
+  /// AI 评语
+  aiReview        String?
+  /// 教师最终评分
+  finalScore      Decimal?         @db.Decimal(5, 2)
+  /// 教师评语
+  teacherComment  String?
+  /// 提交状态
+  status          SubmissionStatus @default(SUBMITTED)
+  /// 创建时间
+  createdAt       DateTime         @default(now())
+
+  /// 关联课题
+  assignment      Assignment       @relation(fields: [assignmentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  /// 关联学生用户
+  student         User             @relation("StudentSubmissions", fields: [studentId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  /// 一对一：剧生生联动记录
+  jushengshengRef JushengshengRef?
+
+  @@index([assignmentId, createdAt])
+  @@index([studentId, createdAt])
+  @@index([status, createdAt])
+  @@unique([assignmentId, studentId])
+}
+
+/// 剧生生联动记录表（与 Submission 一对一）
+model JushengshengRef {
+  /// 主键 ID（CUID）
+  id                  String     @id @default(cuid())
+  /// 提交记录 ID（唯一外键，保证一对一）
+  submissionId        String     @unique
+  /// 剧生生侧剧目 ID
+  jushengshengDramaId String
+  /// 播放量
+  playCount           Int        @default(0)
+  /// 收益
+  revenue             Decimal    @default(0) @db.Decimal(12, 2)
+  /// 更新时间
+  updatedAt           DateTime   @updatedAt
+
+  /// 关联提交记录
+  submission          Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+
+  @@index([jushengshengDramaId])
+}
