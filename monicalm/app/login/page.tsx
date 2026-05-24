@@ -51,10 +51,16 @@ function LoginForm() {
       if (!res.ok || !data?.success) {
         throw new Error(data?.error?.message ?? '用户名或密码错误');
       }
-      router.replace(next);
+      // 使用 window.location 整页跳转,避免 Next.js 客户端路由在 Edge runtime
+      // 下偶发不读取新设置的 HttpOnly cookie 导致中间件再次重定向到 /login。
+      // 同时强制让中间件以「已登录」状态重新评估目标路由。
+      if (typeof window !== 'undefined') {
+        window.location.assign(next);
+      } else {
+        router.replace(next);
+      }
     } catch (e: any) {
       setErr(e?.message ?? '登录失败');
-    } finally {
       setBusy(false);
     }
   };
